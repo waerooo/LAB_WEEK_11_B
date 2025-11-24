@@ -1,0 +1,19 @@
+1. Bagian Kode yang Menangani Penyimpanan Gambar Berdasarkan URI:
+Saat pengguna mengambil gambar, proses penyimpanan di lokasi yang ditentukan oleh URI yang diberikan ke aplikasi kamera ditangani oleh Activity Result Launcher di MainActivity.kt. Launcher ini menentukan tindakan yang harus diambil setelah aplikasi kamera berhasil menyelesaikan tugasnya, yaitu memanggil fungsi penyimpan.
+
+Kode:
+takePictureLauncher =
+    registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        providerFileManager.insertImageToStore(photoInfo)
+    }
+
+2. Penjelasan Atribut dalam FileInfo.kt:
+- URI: Content URI sementara (temporary) dari FileProvider. URI ini adalah "izin" bagi aplikasi kamera untuk menulis file di private storage aplikasi kita.
+
+- relativePath: Jalur koleksi media standar ("Pictures" atau "Movies"). Ini menentukan folder tujuan file di MediaStore agar dapat dilihat di Galeri.
+
+3. Urutan Kronologis Penyimpanan Media:
+- URI: Aplikasi membuat URI sementara (FileProvider).
+- Kamera Ambil: Kamera dijalankan, mengambil gambar, dan menyimpan file ke lokasi sementara menggunakan URI itu.
+- Salin Permanen: Aplikasi mengambil file sementara tersebut, membuat entry baru di MediaStore, dan menyalin data ke lokasi permanen (Pictures/Movies).
+- Hapus & Final: File sementara dihapus dan file sekarang ada di Galeri.
